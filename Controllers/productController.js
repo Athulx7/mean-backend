@@ -2,6 +2,7 @@
 
 // get all products 
 
+const carts = require("../Models/cartSchema")
 const products = require("../Models/producModel")
 const wishLists = require("../Models/wishListModel")
 
@@ -94,3 +95,78 @@ exports.getAllwishlistItems = async(req,res)=>{
     }
 
 }
+
+
+
+
+//delte wishlisti 
+
+exports.deleteWishlist = async(req,res)=>{
+    console.log("insnde delete wishlist items")
+    const userid = req.payload
+    const {id} = req.params
+    console.log(id)
+
+    try{
+        const deleting = await wishLists.findByIdAndDelete({ _id:id})
+        res.status(201).json(deleting)
+
+    }
+    catch(err){
+        res.status(401).json(err)
+
+    }
+
+}
+
+
+
+
+//add to cart
+
+exports.addToCart = async(req,res)=>{
+    console.log("inside add to cart controller")
+    const userid = req.payload
+    console.log(req.body)
+   
+
+    try{
+        const {rating,id,title,price,description,category,image,quantity} = req.body
+
+        const existingProduct = await carts.findOne({id,userid})
+        if(existingProduct){
+            existingProduct.quantity+=1
+            existingProduct.grandTotal = existingProduct.quantity*existingProduct.price
+        }
+        else{
+            const newCartItems = new carts({
+    
+                rating:rating,
+                title:title,
+                id:id,
+                price:price,
+                description:description,
+                category:category,
+                image:image,
+                userid:userid,
+                quantity:quantity,
+                grandTotal:grandTotal
+
+
+    
+    
+    
+    
+            })
+        }
+
+
+    }
+    catch(err){
+        res.status(401).json(err)
+    }
+
+
+}
+
+

@@ -12,6 +12,11 @@ router.get('/user/getproductdetailID/:id',producController.getProductById)
 
 router.post('/user/addTowish',jwtmiddldeware,producController.addTowishlist)
 router.get('/user/getAllwishItems',jwtmiddldeware,producController.getAllwishlistItems)
+router.delete('/user/deleteWishlist/:id',jwtmiddldeware,producController.deleteWishlist)
+
+
+router.post('/user/addtoCart',jwtmiddldeware,producController.addToCart)
+
 
 
 
