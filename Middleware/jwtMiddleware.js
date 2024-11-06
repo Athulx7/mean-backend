@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const jwtmiddldeware = (req,res,next)=>{
     console.log("inside jwt middleware")
     const token = req.headers['authorization'].split(' ')[1]
+    console.log(token)
     try{
         const jwtResponce = jwt.verify(token, 'userpwd123')
         req.payload = jwtResponce.userid
