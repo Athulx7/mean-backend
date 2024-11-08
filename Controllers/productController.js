@@ -82,7 +82,7 @@ exports.addTowishlist = async(req,res)=>{
 //get all wishlist products 
 
 exports.getAllwishlistItems = async(req,res)=>{
-    console.log("inside get all wishlisit items conroller")
+    // console.log("inside get all wishlisit items conroller")
     const userid = req.payload
     // console.log(userid)
     try{
@@ -127,7 +127,7 @@ exports.deleteWishlist = async(req,res)=>{
 exports.addToCart = async(req,res)=>{
     console.log("inside add to cart controller")
     const userid = req.payload
-    console.log(req.body)
+    // console.log(req.body)
    
 
     try{
@@ -150,19 +150,17 @@ exports.addToCart = async(req,res)=>{
                 image:image,
                 userid:userid,
                 quantity:quantity,
-                grandTotal:grandTotal
-
-
-    
-    
-    
-    
+                grandTotal:price
             })
+            await newCartItems.save()
+            res.status(201).json(newCartItems)
         }
 
 
     }
     catch(err){
+        console.log("errror occured when the item added to cart")
+        console.log(err)
         res.status(401).json(err)
     }
 
@@ -170,3 +168,20 @@ exports.addToCart = async(req,res)=>{
 }
 
 
+
+
+exports.getCartItems = async(req,res)=>{
+    console.log("inside get cart items controller")
+    // console.log(req.payload)
+    const userid = req.payload
+
+    try{
+        const getCart = await carts.find({userid:userid})
+        res.status(201).json(getCart)
+        // console.log(getCart)
+
+    }
+    catch(err){
+        res.status(401).json(err)
+    }
+}

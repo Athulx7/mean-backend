@@ -16,6 +16,7 @@ router.delete('/user/deleteWishlist/:id',jwtmiddldeware,producController.deleteW
 
 
 router.post('/user/addtoCart',jwtmiddldeware,producController.addToCart)
+router.get('/users/getallCartitem',jwtmiddldeware,producController.getCartItems)
 
 
 
