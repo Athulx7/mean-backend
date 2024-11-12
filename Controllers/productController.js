@@ -185,3 +185,84 @@ exports.getCartItems = async(req,res)=>{
         res.status(401).json(err)
     }
 }
+
+
+
+//increment product items
+
+exports.incrementProduct = async(req,res)=>{
+    console.log("inside increment")
+    const {id} = req.params
+    try{
+
+        const selectedItems = await carts.findOne({_id:id})
+        if(selectedItems){
+            selectedItems.quantity = selectedItems.quantity+1
+            selectedItems.grandTotal = selectedItems.price* selectedItems.quantity
+            await selectedItems.save()
+            res.status(201).json(selectedItems)
+        }
+
+    }
+    catch(err){
+        res.status(401).json(err)
+    }
+
+    
+}
+
+
+exports.decremmentProduct = async(req,res)=>{
+    const {id}= req.params
+    try{
+        const selectedItems = await carts.findOne({_id:id})
+        if(selectedItems){
+            selectedItems.quantity = selectedItems.quantity-1
+            if(selectedItems.quantity == 0){
+                await carts.deleteOne({_id:id})
+                res.status(200).json("item removed from cart ")
+            }
+            else{
+            selectedItems.grandTotal = selectedItems.quantity*selectedItems.price
+            await selectedItems.save()
+            res.status(201).json(selectedItems)
+
+
+            }
+        }
+
+    }
+    catch(err){
+        res.status(401).json(err)
+    }
+}
+
+
+exports.emptyCart = async(req,res)=>{
+    const userid = req.payload
+    try{
+
+        await carts.deleteMany({userid})
+
+        res.status(201).json("items deleted successfully")
+
+
+    }
+    catch(err){
+        res.status(401).json(err)
+    }
+}
+
+
+exports.removeitemfromCart = async(req,res)=>{
+    const {id}=req.params
+    try{
+
+        await carts.findByIdAndDelete({_id:id})
+        res.status(201).json("suucesssfulllt deleted")
+
+    }
+    catch(err){
+        res.status(401).json(err)
+    }
+}
